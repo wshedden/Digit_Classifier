@@ -32,7 +32,7 @@ class Network {
         neurons[layer][neuron].value = sigmoid(crossMultiply(currentNeuron.weights, prevLayerValues) + neurons[layer][neuron].bias, false);
       }
     }
-    //normalise(); 
+    //normalise();
   }
 
 
@@ -70,20 +70,22 @@ class Network {
       neurons[0][neuron].value = inputValues[neuron];
     }
   }
+  
+  void setOutputs(float[] outputValues) {
+    for (int neuron = 0; neuron < neurons[neurons.length-1].length; neuron++) {
+      neurons[neurons.length-1][neuron].value = outputValues[neuron];
+    }
+  }
 
   void backpropagate(float[] expected, float learningRate) {
     calculateError(expected, false);
     int n = neurons.length;
     for (int layer = n-1; layer > 0; layer--) {
       for (int neuron = 0; neuron < neurons[layer].length; neuron++) {
-
         neurons[layer][neuron].bias += learningRate * neurons[layer][neuron].error * sigmoid(neurons[layer][neuron].value, true);
-
         for (int weight = 0; weight < neurons[layer][neuron].weights.length; weight++) {
           float delta;
-
           delta = learningRate * neurons[layer][neuron].error * neurons[layer-1][weight].value * sigmoid(neurons[layer][neuron].value, true);
-
           neurons[layer][neuron].weights[weight] += delta;
         }
       }
@@ -163,12 +165,35 @@ class Network {
     writer.flush();
     writer.close();
   }
-  
-  void normalise(){
+
+  void normalise() {
     float[] outputs = getOutputs();
     float sum = sum(outputs);
-    for(int i = 0; i < outputs.length; i++){
-       neurons[neurons.length-1][i].value = outputs[i]/sum; 
-    }  
+    for (int i = 0; i < outputs.length; i++) {
+      neurons[neurons.length-1][i].value = outputs[i]/sum;
+    }
+  }
+
+  void reverse_propagate() {
+    int n = neurons.length;
+    for (int layer = n-1; layer > 0; layer--) {
+      for (int neuron = 0; neuron < neurons[layer].length; neuron++) {
+        float deactivated = sigmoid_inv(neurons[layer][neuron].value);
+        deactivated -= neurons[layer][neuron].bias;
+        for (int weight = 0; weight < neurons[layer][neuron].weights.length; weight++) {
+          float x = deactivated/neurons[layer][neuron].weights[weight];
+          neurons[layer-1][weight].value = x;
+        }
+      }
+    }
+  }
+
+  float[] getInputs() {
+    int inputNum = neurons[0].length;
+    float[] inputs = new float[inputNum];
+    for (int i = 0; i < inputNum; i++) {
+      inputs[i] = neurons[0][i].value;
+    }
+    return inputs;
   }
 }

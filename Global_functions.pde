@@ -4,6 +4,10 @@ float sigmoid(float x, boolean prime) {
   return f;
 }
 
+float sigmoid_inv(float x){
+    return -log(1/x-1);
+}
+
 float relu(float x, boolean prime){
   if(x < 0){
     if(prime) return 0.01;

@@ -64,20 +64,11 @@ void draw() {
 
   if(display){
     xStart=width/2;
-    textSize(14);
-    text(instructions, 275, 40);
     net.setInputs(gridToInput(grid));
     net.propagate();
     prediction = arrayToDigit(net.getOutputs());
     net.display();
-    fill(255);
-    textSize(100);
     fill(0);
-    stroke(156, 19, 168);
-    strokeWeight(2);
-    rect(width/2-170, height/2-88, 100, 100);
-    fill(255);
-    text(prediction, width/2-150, height/2);
     
   } else{
      xStart=width/2-28*tileSize/2; 
