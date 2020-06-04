@@ -4,8 +4,8 @@ float sigmoid(float x, boolean prime) {
   return f;
 }
 
-float sigmoid_inv(float x){
-    return -log(1/x-1);
+float sigmoid_inv(float y){
+    return log(1/(1-y));
 }
 
 float relu(float x, boolean prime){
@@ -141,33 +141,6 @@ void displayGrid(int[][] grid, float tileSize, float xStart, float yStart) {
       fill(grid[i][k]);
       stroke(grid[i][k]);
       rect(i*tileSize+xStart, k*tileSize+yStart, tileSize, tileSize);
-    }
-  }
-}
-
-void updateGrid(int[][] grid, float tileSize, float xStart, float yStart) {
-  int[][] offsets = new int[][]{new int[]{0, 1}, new int[]{1, 0}, new int[]{-1, 0}, new int[]{0, -1}};
-  for (int i = 0; i < grid.length; i++) {
-    for (int k = 0; k < grid[i].length; k++) {
-      if (mouseX >= i*tileSize+xStart && mouseX <= i*tileSize+tileSize+xStart && mousePressed) {
-        if (mouseY >= k*tileSize+yStart && mouseY <= k*tileSize+tileSize+yStart && mouseButton == LEFT) {
-          grid[i][k] = 255;
-          for (int offset = 0; offset < offsets.length; offset++) {
-            try {
-              int value = grid[i+offsets[offset][0]][k+offsets[offset][1]];
-              if(value < 180){
-                value = 180;
-              } else if(value == 180) value = 240;
-              grid[i+offsets[offset][0]][k+offsets[offset][1]] = value;
-            }
-            catch(Exception e) {
-            }
-          }
-        }
-      }
-      if (mousePressed && mouseButton == RIGHT) {
-        grid[i][k] = 0;
-      }
     }
   }
 }

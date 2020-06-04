@@ -176,7 +176,7 @@ class Network {
 
   void reverse_propagate() {
     int n = neurons.length;
-    for (int layer = n-1; layer > 0; layer--) {
+    for (int layer = n-1; layer > 0; layer--) { //<>//
       for (int neuron = 0; neuron < neurons[layer].length; neuron++) {
         float deactivated = sigmoid_inv(neurons[layer][neuron].value);
         deactivated -= neurons[layer][neuron].bias;
